@@ -4,14 +4,14 @@ import plotly.express as px
 
 # Sidebar inputs
 st.sidebar.title("Lamar Health ROI Calculator")
-patients_per_month = st.sidebar.number_input("Number of Patients per Month", value=200)
+patients_per_month = st.sidebar.number_input("Number of PA's per Month", value=200)
 hourly_salary = st.sidebar.number_input("Hourly Salary ($)", value=22)
 years = st.sidebar.number_input("Time Horizon (Years)", value=3)
 
 # Prior Authorization module
 enable_auth = st.sidebar.checkbox("Include Prior Authorization", value=True)
-st.sidebar.caption("**Prior Authorization Formula:**\nBefore: 30 min × patients/month × hourly wage\nAfter: $prior auth price + 1 min × patients/month × hourly wage")
-auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=6)
+st.sidebar.caption("**Prior Authorization Formula:**\nBefore: 30 min × PA's/month × hourly wage\nAfter: $prior auth price + 1 min × PA's/month × hourly wage")
+auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=6.00, step=0.05, format="%.2f")
 
 # Constants
 months = years * 12
