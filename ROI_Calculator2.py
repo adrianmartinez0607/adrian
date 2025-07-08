@@ -13,6 +13,10 @@ enable_auth = st.sidebar.checkbox("Include Prior Authorization", value=True)
 st.sidebar.caption("**Prior Authorization Formula:**\nBefore: 30 min × PA's/month × hourly wage\nAfter: $prior auth price + 1 min × PA's/month × hourly wage")
 auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=6.00, step=0.05, format="%.2f")
 
+# Revenue Recapture inputs
+baseline_denial_rate = st.sidebar.number_input("Baseline Denial Rate (%)", value=60, min_value=0, max_value=100, step=1)
+annual_revenue_per_patient = st.sidebar.number_input("Annual Estimated Cost per Patient ($)", value=80000, step=1000)
+
 # Constants
 months = years * 12
 minutes_to_hours = 1 / 60
@@ -68,16 +72,26 @@ st.plotly_chart(fig)
 
 st.write("Lamar Health offers automation for Prior Authorization. Customize the inputs on the left to see how much you can save.")
 
-# Revenue Recapture
-st.header("Revenue Recapture from Policy Review")
-denial_rates = [x / 100 for x in range(1, 21)]  # 1% to 20%
+# Revenue Recapture from Lamar PA Submissions
+st.header("Revenue Recapture from Lamar PA Submissions")
+
+# Generate improvement scenarios: 1% to 20% improvement
+denial_rate_improvements = [x for x in range(1, 21)]  # 1% to 20% improvement
 patients_per_year = patients_per_month * 12
-revenue_per_patient = 80000  # Assumed chronic patient annual revenue
-revenue_recaptured = [(patients_per_year * revenue_per_patient * rate) / 100000 for rate in denial_rates]
+
+# Calculate revenue recaptured for each improvement level
+revenue_recaptured = [
+    (patients_per_year * annual_revenue_per_patient * (baseline_denial_rate / 100) * (improvement / 100)) / 100000
+    for improvement in denial_rate_improvements
+]
+
+# Prepare data for plotting
 revenue_data_display = pd.DataFrame({
-    'Denial Rate Improvement (%)': [r * 100 for r in denial_rates],
+    'Denial Rate Improvement (%)': denial_rate_improvements,
     'Revenue Recaptured ($100,000s)': revenue_recaptured
 })
+
+# Plot
 fig2 = px.line(
     revenue_data_display,
     x='Denial Rate Improvement (%)',
@@ -90,8 +104,11 @@ fig2.update_layout(
     yaxis_title='Revenue Recaptured ($100,000s)'
 )
 st.plotly_chart(fig2)
-st.caption("""
+
+st.caption(f"""
 **Calculation Logic:**
-Revenue Recaptured = Number of Patients per Year × $80,000 (estimated chronic care revenue per patient) × Denial Rate Improvement (%)
-This assumes each patient contributes $80,000 annually and that improvement in denial rates results in direct revenue recovery.
+Revenue Recaptured = Patients per Year × Annual Cost per Patient × Baseline Denial Rate × Denial Rate Improvement (%)
+
+- **Baseline Denial Rate:** {baseline_denial_rate}%
+- **Annual Cost per Patient:** ${annual_revenue_per_patient:,.0f}
 """)
