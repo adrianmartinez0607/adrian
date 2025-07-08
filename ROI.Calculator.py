@@ -1,7 +1,3 @@
-import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import plotly.express as px
 # Sidebar inputs
 st.sidebar.title("Lamar Health ROI Calculator")
 patients_per_month = st.sidebar.number_input("Number of Patients per Month", value=200)
