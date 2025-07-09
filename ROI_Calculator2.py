@@ -37,17 +37,17 @@ savings = cost_before_total - cost_after_total
 time_saved_hours = savings / hourly_salary if hourly_salary != 0 else 0
 roi_percent = (savings / cost_before_total) * 100 if cost_before_total != 0 else 0
 
-# Revenue Generated from increase in approval rate
+# Revenue Generated (clip negative improvements to zero) and multiply by time horizon
 approval_rate_delta = improved_approval_rate - baseline_approval_rate
 approval_rate_improvement = max(0, approval_rate_delta / 100)
-revenue_generated = patients_per_year * annual_revenue_per_patient * approval_rate_improvement
+revenue_generated = patients_per_year * annual_revenue_per_patient * approval_rate_improvement * years
 
 # Summary
 st.title("Lamar Health ROI Summary")
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Time Saved (Hours)", f"{time_saved_hours:,.2f}")
-col2.metric("Cost Savings ($)", f"${savings:,.2f}")
-col3.metric("Revenue Generated", f"{revenue_generated:,.0f}")
+col2.metric("Cost Savings ($)", f"${savings:,.0f}")
+col3.metric("Revenue Generated ($)", f"${revenue_generated:,.0f}")
 col4.metric("ROI (%)", f"{roi_percent:.2f}%")
 
 # Time graph data
@@ -119,7 +119,7 @@ st.plotly_chart(fig2)
 
 st.caption("""
 **Calculation Logic:**
-Revenue Generated = Patients per Year × Annual Revenue per PA × (Improved Approval Rate – Baseline Approval Rate)
+Revenue Generated = Patients per Year × Annual Revenue per PA × (Improved Approval Rate – Baseline Approval Rate) × Time Horizon
 
 Chart values are expressed in **$10M units**.
 """)
