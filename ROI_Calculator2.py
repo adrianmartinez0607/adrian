@@ -117,6 +117,10 @@ revenue_df_melted = revenue_df.melt(
 y_max = max(revenue_baseline + revenue_improved)
 y_max_rounded = math.ceil(y_max / 10) * 10
 
+# Custom tick labels in $10M increments
+y_ticks = list(range(0, y_max_rounded + 1, 10))
+y_tick_labels = [f"${val}M" for val in y_ticks]
+
 fig2 = px.line(
     revenue_df_melted,
     x="PA's Submitted Annually",
@@ -130,7 +134,7 @@ fig2.update_layout(
     xaxis_title="PA's Submitted Annually",
     yaxis_title="Revenue Generated ($M)",
     xaxis=dict(tickmode='linear', tick0=0, dtick=150000),
-    yaxis=dict(tickmode='linear', tick0=0, dtick=10, range=[0, y_max_rounded]),
+    yaxis=dict(tickmode='array', tickvals=y_ticks, ticktext=y_tick_labels),
     legend_title='Scenario'
 )
 
