@@ -12,7 +12,7 @@ years = st.sidebar.number_input("Time Horizon (Years)", value=3)
 # Prior Authorization module
 enable_auth = st.sidebar.checkbox("Include Prior Authorization", value=True)
 st.sidebar.caption("**Prior Authorization Formula:**\nBefore: 30 min × PA's/month × hourly wage\nAfter: $prior auth price + 1 min × PA's/month × hourly wage")
-auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=6.00, step=0.05, format="%.2f")
+auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=8.00, step=0.05, format="%.2f")
 
 # Revenue inputs
 baseline_approval_rate = st.sidebar.number_input("Baseline Approval Rate (%)", value=40, min_value=0, max_value=100, step=1)
