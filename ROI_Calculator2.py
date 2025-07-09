@@ -50,7 +50,7 @@ else:
     revenue_display = f"${rounded_revenue / 1_000_000:.2f}M"
 
 # Summary (removed ROI)
-st.title("Lamar Health ROI Summary")
+st.title("Lamar Health ROI Summary") 
 col1, col2, col3 = st.columns(3)
 col1.metric("Time Saved (Hours)", f"{time_saved_hours:,.2f}")
 col2.metric("Cost Savings ($)", f"${savings:,.0f}")
