@@ -124,6 +124,7 @@ fig2.update_layout(
     xaxis_title="PA's Submitted Annually",
     yaxis_title="Revenue Generated ($M)",
     xaxis=dict(tickmode='linear', tick0=0, dtick=150000),
+    yaxis=dict(tickmode='linear', tick0=0, dtick=10, range=[0, 100]),
     legend_title='Scenario'
 )
 
