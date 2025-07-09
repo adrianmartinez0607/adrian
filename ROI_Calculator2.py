@@ -91,11 +91,11 @@ st.header("Revenue Generated from Lamar PA Submissions")
 pa_range = list(range(0, 750001, 150000))  # 0 to 750,000 in 150,000 increments
 
 revenue_baseline = [
-    (pa * annual_revenue_per_patient * (baseline_approval_rate / 100) * years) / 10000000
+    (pa * annual_revenue_per_patient * (baseline_approval_rate / 100) * years) / 1000000
     for pa in pa_range
 ]
 revenue_improved = [
-    (pa * annual_revenue_per_patient * (improved_approval_rate / 100) * years) / 10000000
+    (pa * annual_revenue_per_patient * (improved_approval_rate / 100) * years) / 1000000
     for pa in pa_range
 ]
 
@@ -108,13 +108,13 @@ revenue_df = pd.DataFrame({
 revenue_df_melted = revenue_df.melt(
     id_vars="PA's Submitted Annually",
     var_name="Scenario",
-    value_name="Revenue Generated ($10M)"
+    value_name="Revenue Generated ($M)"
 )
 
 fig2 = px.line(
     revenue_df_melted,
     x="PA's Submitted Annually",
-    y="Revenue Generated ($10M)",
+    y="Revenue Generated ($M)",
     color="Scenario",
     title="Revenue Generated vs. PA's Submitted Annually",
     markers=True
@@ -122,8 +122,9 @@ fig2 = px.line(
 
 fig2.update_layout(
     xaxis_title="PA's Submitted Annually",
-    yaxis_title="Revenue Generated ($10M)",
+    yaxis_title="Revenue Generated ($M)",
     xaxis=dict(tickmode='linear', tick0=0, dtick=150000),
+    yaxis=dict(tickformat=".0f", rangemode="tozero", autorange=True),
     legend_title='Scenario'
 )
 
@@ -133,5 +134,5 @@ st.caption("""
 **Calculation Logic:**
 Revenue Generated = PA’s Submitted Annually × Annual Revenue per PA × Approval Rate × Time Horizon
 
-Chart values are expressed in **$10M units**.
+Chart values are expressed in **$1M units**.
 """)
