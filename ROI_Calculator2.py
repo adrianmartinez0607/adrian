@@ -87,8 +87,8 @@ st.write("Lamar Health offers automation for Prior Authorization. Customize the 
 # Revenue Generated from Lamar PA Submissions
 st.header("Revenue Generated from Lamar PA Submissions")
 
-# X-axis: PA volume range (0 to 750k in steps of 150k)
-pa_range = list(range(0, 750001, 150000))
+# Generate chart data: X-axis = PA's submitted annually (0 to 750k in steps of 150k)
+pa_range = list(range(0, 750001, 150000))  # 0 to 750,000 in 150,000 increments
 
 revenue_baseline = [
     (pa * annual_revenue_per_patient * (baseline_approval_rate / 100) * years) / 1_000_000
@@ -98,9 +98,6 @@ revenue_improved = [
     (pa * annual_revenue_per_patient * (improved_approval_rate / 100) * years) / 1_000_000
     for pa in pa_range
 ]
-
-max_revenue = max(max(revenue_baseline), max(revenue_improved))
-y_axis_max = math.ceil(max_revenue / 10) * 10
 
 revenue_df = pd.DataFrame({
     "PA's Submitted Annually": pa_range,
@@ -127,7 +124,6 @@ fig2.update_layout(
     xaxis_title="PA's Submitted Annually",
     yaxis_title="Revenue Generated ($M)",
     xaxis=dict(tickmode='linear', tick0=0, dtick=150000),
-    yaxis=dict(tickmode='linear', tick0=0, dtick=10, range=[0, y_axis_max]),
     legend_title='Scenario'
 )
 
