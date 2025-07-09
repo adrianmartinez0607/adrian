@@ -49,7 +49,7 @@ if rounded_revenue >= 1_000_000_000:
 else:
     revenue_display = f"${rounded_revenue / 1_000_000:.2f}M"
 
-# Summary
+# Summary (ROI removed)
 st.title("Lamar Health ROI Summary")
 col1, col2, col3 = st.columns(3)
 col1.metric("Time Saved (Hours)", f"{time_saved_hours:,.2f}")
@@ -87,46 +87,51 @@ st.write("Lamar Health offers automation for Prior Authorization. Customize the 
 # Revenue Generated from Lamar PA Submissions
 st.header("Revenue Generated from Lamar PA Submissions")
 
-# Generate chart data for 0–100% approval rate scenarios in 10% steps
-approval_rate_improvements = list(range(0, 101, 10))
+# Generate chart data: X-axis = PA's submitted annually (0 to 750k in steps of 150k)
+pa_range = list(range(0, 750001, 150000))  # 0 to 750,000 in 150,000 increments
+
 revenue_baseline = [
-    (patients_per_year * annual_revenue_per_patient * (baseline_approval_rate / 100) * (rate / 100)) / 10000000
-    for rate in approval_rate_improvements
+    (pa * annual_revenue_per_patient * (baseline_approval_rate / 100) * years) / 10000000
+    for pa in pa_range
 ]
 revenue_improved = [
-    (patients_per_year * annual_revenue_per_patient * (improved_approval_rate / 100) * (rate / 100)) / 10000000
-    for rate in approval_rate_improvements
+    (pa * annual_revenue_per_patient * (improved_approval_rate / 100) * years) / 10000000
+    for pa in pa_range
 ]
 
 revenue_df = pd.DataFrame({
-    'Approval Rate (%)': approval_rate_improvements,
+    "PA's Submitted Annually": pa_range,
     f'Baseline Approval Rate ({baseline_approval_rate}%)': revenue_baseline,
     f'Improved Approval Rate ({improved_approval_rate}%)': revenue_improved
 })
 
-revenue_df_melted = revenue_df.melt(id_vars='Approval Rate (%)',
-                                    var_name='Scenario',
-                                    value_name='Revenue Generated ($10M)')
+revenue_df_melted = revenue_df.melt(
+    id_vars="PA's Submitted Annually",
+    var_name="Scenario",
+    value_name="Revenue Generated ($10M)"
+)
 
 fig2 = px.line(
     revenue_df_melted,
-    x='Approval Rate (%)',
-    y='Revenue Generated ($10M)',
-    color='Scenario',
-    title='Revenue Generated vs. Approval Rate',
+    x="PA's Submitted Annually",
+    y="Revenue Generated ($10M)",
+    color="Scenario",
+    title="Revenue Generated vs. PA's Submitted Annually",
     markers=True
 )
+
 fig2.update_layout(
-    xaxis_title='Approval Rate (%)',
-    xaxis=dict(tickmode='linear', tick0=0, dtick=10),
-    yaxis_title='Revenue Generated ($10M)',
+    xaxis_title="PA's Submitted Annually",
+    yaxis_title="Revenue Generated ($10M)",
+    xaxis=dict(tickmode='linear', tick0=0, dtick=150000),
     legend_title='Scenario'
 )
+
 st.plotly_chart(fig2)
 
 st.caption("""
 **Calculation Logic:**
-Revenue Generated = Patients per Year × Annual Revenue per PA × (Improved Approval Rate − Baseline Approval Rate) × Time Horizon
+Revenue Generated = PA’s Submitted Annually × Annual Revenue per PA × Approval Rate × Time Horizon
 
 Chart values are expressed in **$10M units**.
 """)
