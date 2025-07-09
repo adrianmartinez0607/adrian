@@ -87,7 +87,7 @@ st.write("Lamar Health offers automation for Prior Authorization. Customize the 
 # Revenue Generated from Approvals Graph
 st.header("Revenue Generated from Approvals")
 
-# X-axis: Range of PA's Submitted Annually (e.g., 0 to 750,000 in steps)
+# X-axis: Range of PA's Submitted Annually (e.g., 0 to max value)
 max_pas = patients_per_month * 12 * years
 step_size = max(1000, int(max_pas / 10))
 pa_submitted_range = list(range(0, max_pas + 1, step_size))
@@ -129,3 +129,13 @@ fig3.update_layout(
 )
 
 st.plotly_chart(fig3)
+
+st.caption("""
+**Calculation Logic:**
+
+Baseline Revenue = PA's Submitted × Baseline Approval Rate × Annual Revenue per PA × Time Horizon
+
+Improved Revenue = PA's Submitted × Improved Approval Rate × Annual Revenue per PA × Time Horizon
+
+Chart values are expressed in **$1M units**.
+""")
