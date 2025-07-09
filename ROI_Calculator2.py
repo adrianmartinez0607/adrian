@@ -13,16 +13,16 @@ enable_auth = st.sidebar.checkbox("Include Prior Authorization", value=True)
 st.sidebar.caption("**Prior Authorization Formula:**\nBefore: 30 min × PA's/month × hourly wage\nAfter: $prior auth price + 1 min × PA's/month × hourly wage")
 auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=6.00, step=0.05, format="%.2f")
 
-# Revenue Recapture inputs
-baseline_denial_rate = st.sidebar.number_input("Baseline Denial Rate (%)", value=60, min_value=0, max_value=100, step=1)
-improved_denial_rate = st.sidebar.number_input("Improved Denial Rate (%)", value=50, min_value=0, max_value=100, step=1)
+# Revenue inputs
+baseline_approval_rate = st.sidebar.number_input("Baseline Approval Rate (%)", value=40, min_value=0, max_value=100, step=1)
+improved_approval_rate = st.sidebar.number_input("Improved Approval Rate (%)", value=50, min_value=0, max_value=100, step=1)
 annual_revenue_per_patient = st.sidebar.number_input("Annual Revenue per PA Processed ($)", value=80000, step=1000)
 
 # Constants
 months = years * 12
 minutes_to_hours = 1 / 60
 auth_time = 40
-post_lamar_time = 1  # 1 minute of staff time per patient per module
+post_lamar_time = 1
 patients_per_year = patients_per_month * 12
 
 # Cost before and after Lamar
@@ -37,17 +37,17 @@ savings = cost_before_total - cost_after_total
 time_saved_hours = savings / hourly_salary if hourly_salary != 0 else 0
 roi_percent = (savings / cost_before_total) * 100 if cost_before_total != 0 else 0
 
-# Revenue Generated (clip negative improvements to zero)
-denial_rate_delta = baseline_denial_rate - improved_denial_rate
-denial_rate_improvement = max(0, denial_rate_delta / 100)
-revenue_generated = patients_per_year * annual_revenue_per_patient * denial_rate_improvement
+# Revenue Generated from increase in approval rate
+approval_rate_delta = improved_approval_rate - baseline_approval_rate
+approval_rate_improvement = max(0, approval_rate_delta / 100)
+revenue_generated = patients_per_year * annual_revenue_per_patient * approval_rate_improvement
 
 # Summary
 st.title("Lamar Health ROI Summary")
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Time Saved (Hours)", f"{time_saved_hours:,.2f}")
 col2.metric("Cost Savings ($)", f"${savings:,.2f}")
-col3.metric("Revenue Generated ($)", f"${revenue_generated:,.2f}")
+col3.metric("Revenue Generated", f"{revenue_generated:,.0f}")
 col4.metric("ROI (%)", f"{roi_percent:.2f}%")
 
 # Time graph data
@@ -55,14 +55,12 @@ months_range = list(range(1, months + 1))
 costs_before = [(auth_time * minutes_to_hours * patients_per_month * hourly_salary) * m for m in months_range]
 costs_after = [((auth_price) + (post_lamar_time * minutes_to_hours * hourly_salary)) * patients_per_month * m for m in months_range]
 
-# Create DataFrame for plotting
 data_plot = pd.DataFrame({
     'Month': months_range,
     'Cost Before Lamar': costs_before,
     'Cost After Lamar': costs_after
 })
 
-# Plot cost comparison
 fig = px.line(
     data_plot,
     x='Month',
@@ -80,43 +78,40 @@ st.plotly_chart(fig)
 
 st.write("Lamar Health offers automation for Prior Authorization. Customize the inputs on the left to see how much you can save.")
 
-# Revenue Recapture from Lamar PA Submissions
-st.header("Revenue Recapture from Lamar PA Submissions")
+# Revenue Generated from Lamar PA Submissions
+st.header("Revenue Generated from Lamar PA Submissions")
 
-# Generate chart data for 1–20% improvement scenarios
-denial_rate_improvements = list(range(1, 21))
+# Generate chart data for 1–20% approval rate improvement scenarios
+approval_rate_improvements = list(range(1, 21))
 revenue_baseline = [
-    (patients_per_year * annual_revenue_per_patient * (baseline_denial_rate / 100) * (improvement / 100)) / 10000000
-    for improvement in denial_rate_improvements
+    (patients_per_year * annual_revenue_per_patient * (baseline_approval_rate / 100) * (improvement / 100)) / 10000000
+    for improvement in approval_rate_improvements
 ]
 revenue_improved = [
-    (patients_per_year * annual_revenue_per_patient * (improved_denial_rate / 100) * (improvement / 100)) / 10000000
-    for improvement in denial_rate_improvements
+    (patients_per_year * annual_revenue_per_patient * (improved_approval_rate / 100) * (improvement / 100)) / 10000000
+    for improvement in approval_rate_improvements
 ]
 
-# Prepare chart
 revenue_df = pd.DataFrame({
-    'Denial Rate Improvement (%)': denial_rate_improvements,
-    f'Baseline Denial Rate ({baseline_denial_rate}%)': revenue_baseline,
-    f'Improved Denial Rate ({improved_denial_rate}%)': revenue_improved
+    'Approval Rate Improvement (%)': approval_rate_improvements,
+    f'Baseline Approval Rate ({baseline_approval_rate}%)': revenue_baseline,
+    f'Improved Approval Rate ({improved_approval_rate}%)': revenue_improved
 })
 
-# Melt for multi-line chart
-revenue_df_melted = revenue_df.melt(id_vars='Denial Rate Improvement (%)',
-                                     var_name='Scenario',
-                                     value_name='Revenue Generated ($10M)')
+revenue_df_melted = revenue_df.melt(id_vars='Approval Rate Improvement (%)',
+                                    var_name='Scenario',
+                                    value_name='Revenue Generated ($10M)')
 
-# Plot
 fig2 = px.line(
     revenue_df_melted,
-    x='Denial Rate Improvement (%)',
+    x='Approval Rate Improvement (%)',
     y='Revenue Generated ($10M)',
     color='Scenario',
-    title='Revenue Generated vs. Denial Rate Improvement',
+    title='Revenue Generated vs. Approval Rate Improvement',
     markers=True
 )
 fig2.update_layout(
-    xaxis_title='Denial Rate Improvement (%)',
+    xaxis_title='Approval Rate Improvement (%)',
     yaxis_title='Revenue Generated ($10M)',
     legend_title='Scenario'
 )
@@ -124,7 +119,7 @@ st.plotly_chart(fig2)
 
 st.caption("""
 **Calculation Logic:**
-Revenue Generated = Patients per Year × Annual Revenue per PA × (Baseline Denial Rate – Improved Denial Rate)
+Revenue Generated = Patients per Year × Annual Revenue per PA × (Improved Approval Rate – Baseline Approval Rate)
 
 Chart values are expressed in **$10M units**.
 """)
