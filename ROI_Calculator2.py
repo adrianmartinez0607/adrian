@@ -29,7 +29,7 @@ fig2 = px.line(
     revenue_df_melted,
     x="PA's Submitted Annually",
     y="Revenue Generated ($10M)",
-    color="Scenario",
+    color="Scenario", 
     title="Revenue Generated vs. PA's Submitted Annually",
     markers=True
 )
