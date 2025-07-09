@@ -17,7 +17,7 @@ auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", valu
 # Revenue inputs
 baseline_approval_rate = st.sidebar.number_input("Baseline Approval Rate (%)", value=40, min_value=0, max_value=100, step=1)
 improved_approval_rate = st.sidebar.number_input("Improved Approval Rate (%)", value=46, min_value=0, max_value=100, step=1)
-annual_revenue_per_patient = st.sidebar.number_input("Annual Revenue per PA Processed ($)", value=80000, step=1000)
+annual_revenue_per_patient = st.sidebar.number_input("Annual Revenue per PA Processed ($)", value=10000, step=1000)
 
 # Constants
 months = years * 12
