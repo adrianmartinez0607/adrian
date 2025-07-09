@@ -23,6 +23,7 @@ months = years * 12
 minutes_to_hours = 1 / 60
 auth_time = 40
 post_lamar_time = 1  # 1 minute of staff time per patient per module
+patients_per_year = patients_per_month * 12
 
 # Cost before and after Lamar
 cost_before_auth = auth_time * minutes_to_hours * patients_per_month * hourly_salary * months if enable_auth else 0
@@ -36,20 +37,18 @@ savings = cost_before_total - cost_after_total
 time_saved_hours = savings / hourly_salary if hourly_salary != 0 else 0
 roi_percent = (savings / cost_before_total) * 100 if cost_before_total != 0 else 0
 
-# Revenue Generated from improved denial rate
-patients_per_year = patients_per_month * 12
-revenue_generated = (
-    patients_per_year * annual_revenue_per_patient *
-    ((baseline_denial_rate - improved_denial_rate) / 100)
-)
+# Revenue Generated (clip negative improvements to zero)
+denial_rate_delta = baseline_denial_rate - improved_denial_rate
+denial_rate_improvement = max(0, denial_rate_delta / 100)
+revenue_generated = patients_per_year * annual_revenue_per_patient * denial_rate_improvement
 
 # Summary
 st.title("Lamar Health ROI Summary")
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Time Saved (Hours)", f"{time_saved_hours:,.2f}")
 col2.metric("Cost Savings ($)", f"${savings:,.2f}")
-col3.metric("ROI (%)", f"{roi_percent:.2f}%")
-col4.metric("Revenue Generated ($)", f"${revenue_generated:,.2f}")
+col3.metric("Revenue Generated ($)", f"${revenue_generated:,.2f}")
+col4.metric("ROI (%)", f"{roi_percent:.2f}%")
 
 # Time graph data
 months_range = list(range(1, months + 1))
@@ -125,7 +124,7 @@ st.plotly_chart(fig2)
 
 st.caption("""
 **Calculation Logic:**
-Revenue Generated = Patients per Year × Annual Revenue per PA × Denial Rate × Denial Rate Improvement (%)
+Revenue Generated = Patients per Year × Annual Revenue per PA × (Baseline Denial Rate – Improved Denial Rate)
 
 Chart values are expressed in **$10M units**.
 """)
