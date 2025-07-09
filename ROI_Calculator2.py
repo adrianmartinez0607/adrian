@@ -15,8 +15,8 @@ auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", valu
 
 # Revenue Recapture inputs
 baseline_denial_rate = st.sidebar.number_input("Baseline Denial Rate (%)", value=60, min_value=0, max_value=100, step=1)
-improved_denial_rate = st.sidebar.number_input("Improved Denial Rate (%)", value=60, min_value=0, max_value=100, step=1)
-annual_revenue_per_patient = st.sidebar.number_input("Annual Estimated Cost per Patient ($)", value=80000, step=1000)
+improved_denial_rate = st.sidebar.number_input("Improved Denial Rate (%)", value=50, min_value=0, max_value=100, step=1)
+annual_revenue_per_patient = st.sidebar.number_input("Annual Revenue per PA Processed ($)", value=80000, step=1000)
 
 # Constants
 months = years * 12
@@ -36,12 +36,20 @@ savings = cost_before_total - cost_after_total
 time_saved_hours = savings / hourly_salary if hourly_salary != 0 else 0
 roi_percent = (savings / cost_before_total) * 100 if cost_before_total != 0 else 0
 
+# Revenue Generated from improved denial rate
+patients_per_year = patients_per_month * 12
+revenue_generated = (
+    patients_per_year * annual_revenue_per_patient *
+    ((baseline_denial_rate - improved_denial_rate) / 100)
+)
+
 # Summary
 st.title("Lamar Health ROI Summary")
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 col1.metric("Time Saved (Hours)", f"{time_saved_hours:,.2f}")
 col2.metric("Cost Savings ($)", f"${savings:,.2f}")
 col3.metric("ROI (%)", f"{roi_percent:.2f}%")
+col4.metric("Revenue Generated ($)", f"${revenue_generated:,.2f}")
 
 # Time graph data
 months_range = list(range(1, months + 1))
@@ -76,64 +84,48 @@ st.write("Lamar Health offers automation for Prior Authorization. Customize the 
 # Revenue Recapture from Lamar PA Submissions
 st.header("Revenue Recapture from Lamar PA Submissions")
 
-patients_per_year = patients_per_month * 12
-
-# Total recaptured revenue at baseline and improved
-baseline_total = patients_per_year * annual_revenue_per_patient * (baseline_denial_rate / 100)
-improved_total = patients_per_year * annual_revenue_per_patient * (improved_denial_rate / 100)
-difference = improved_total - baseline_total
-
-st.subheader("📈 Revenue Impact from Improved Denial Rate")
-st.markdown(f"""
-**Baseline Denial Rate:** {baseline_denial_rate}%  
-**Improved Denial Rate:** {improved_denial_rate}%  
-**Annual Revenue per Patient:** ${annual_revenue_per_patient:,.0f}  
-**Monthly PAs:** {patients_per_month}  
-
-💵 **Estimated Additional Revenue Recaptured:**
-### ${difference:,.2f} per year
-""")
-
 # Generate chart data for 1–20% improvement scenarios
 denial_rate_improvements = list(range(1, 21))
 revenue_baseline = [
-    (patients_per_year * annual_revenue_per_patient * (baseline_denial_rate / 100) * (improvement / 100)) / 100000
+    (patients_per_year * annual_revenue_per_patient * (baseline_denial_rate / 100) * (improvement / 100)) / 10000000
     for improvement in denial_rate_improvements
 ]
 revenue_improved = [
-    (patients_per_year * annual_revenue_per_patient * (improved_denial_rate / 100) * (improvement / 100)) / 100000
+    (patients_per_year * annual_revenue_per_patient * (improved_denial_rate / 100) * (improvement / 100)) / 10000000
     for improvement in denial_rate_improvements
 ]
 
 # Prepare chart
 revenue_df = pd.DataFrame({
     'Denial Rate Improvement (%)': denial_rate_improvements,
-    f'Baseline ({baseline_denial_rate}%)': revenue_baseline,
-    f'Improved ({improved_denial_rate}%)': revenue_improved
+    f'Baseline Denial Rate ({baseline_denial_rate}%)': revenue_baseline,
+    f'Improved Denial Rate ({improved_denial_rate}%)': revenue_improved
 })
 
 # Melt for multi-line chart
 revenue_df_melted = revenue_df.melt(id_vars='Denial Rate Improvement (%)',
                                      var_name='Scenario',
-                                     value_name='Revenue Recaptured ($100,000s)')
+                                     value_name='Revenue Generated ($10M)')
 
 # Plot
 fig2 = px.line(
     revenue_df_melted,
     x='Denial Rate Improvement (%)',
-    y='Revenue Recaptured ($100,000s)',
+    y='Revenue Generated ($10M)',
     color='Scenario',
-    title='Revenue Recapture vs. Denial Rate Improvement',
+    title='Revenue Generated vs. Denial Rate Improvement',
     markers=True
 )
 fig2.update_layout(
     xaxis_title='Denial Rate Improvement (%)',
-    yaxis_title='Revenue Recaptured ($100,000s)',
+    yaxis_title='Revenue Generated ($10M)',
     legend_title='Scenario'
 )
 st.plotly_chart(fig2)
 
 st.caption("""
 **Calculation Logic:**
-Revenue Recaptured = Patients per Year × Annual Cost per Patient × (Baseline or Improved Denial Rate) × Denial Rate Improvement (%)
+Revenue Generated = Patients per Year × Annual Revenue per PA × Denial Rate × Denial Rate Improvement (%)
+
+Chart values are expressed in **$10M units**.
 """)
