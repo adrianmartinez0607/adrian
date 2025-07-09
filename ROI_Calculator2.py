@@ -87,8 +87,10 @@ st.write("Lamar Health offers automation for Prior Authorization. Customize the 
 # Revenue Generated from Lamar PA Submissions
 st.header("Revenue Generated from Lamar PA Submissions")
 
-# X-axis: PA volume range (0 to 750k in steps of 150k)
-pa_range = list(range(0, 750001, 150000))
+# X-axis: dynamic PA volume range based on user input
+pa_step = 150000
+max_pa = 750000
+pa_range = list(range(0, max_pa + 1, pa_step))
 
 revenue_baseline = [
     (pa * annual_revenue_per_patient * (baseline_approval_rate / 100) * years) / 1_000_000
