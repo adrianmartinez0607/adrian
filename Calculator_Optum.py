@@ -139,3 +139,4 @@ Improved Revenue = PA's Submitted × Improved Approval Rate × Annual Revenue pe
 
 Chart values are expressed in **$1M units**.
 """)
+ 
