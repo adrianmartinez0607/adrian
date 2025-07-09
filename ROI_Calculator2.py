@@ -16,7 +16,7 @@ auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", valu
 
 # Revenue inputs
 baseline_approval_rate = st.sidebar.number_input("Baseline Approval Rate (%)", value=40, min_value=0, max_value=100, step=1)
-improved_approval_rate = st.sidebar.number_input("Improved Approval Rate (%)", value=50, min_value=0, max_value=100, step=1)
+improved_approval_rate = st.sidebar.number_input("Improved Approval Rate (%)", value=41, min_value=0, max_value=100, step=1)
 annual_revenue_per_patient = st.sidebar.number_input("Annual Revenue per PA Processed ($)", value=80000, step=1000)
 
 # Constants
@@ -36,7 +36,6 @@ cost_after_total = cost_after_auth
 # Savings
 savings = cost_before_total - cost_after_total
 time_saved_hours = savings / hourly_salary if hourly_salary != 0 else 0
-roi_percent = (savings / cost_before_total) * 100 if cost_before_total != 0 else 0
 
 # Revenue Generated (clip negative improvements to zero) and multiply by time horizon
 approval_rate_delta = improved_approval_rate - baseline_approval_rate
@@ -52,11 +51,10 @@ else:
 
 # Summary
 st.title("Lamar Health ROI Summary")
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3 = st.columns(3)
 col1.metric("Time Saved (Hours)", f"{time_saved_hours:,.2f}")
 col2.metric("Cost Savings ($)", f"${savings:,.0f}")
 col3.metric("Revenue Generated ($)", revenue_display)
-col4.metric("ROI (%)", f"{roi_percent:.2f}%")
 
 # Time graph data
 months_range = list(range(1, months + 1))
