@@ -91,11 +91,11 @@ st.header("Revenue Generated from Lamar PA Submissions")
 pa_range = list(range(0, 750001, 150000))  # 0 to 750,000 in 150,000 increments
 
 revenue_baseline = [
-    (pa * annual_revenue_per_patient * (baseline_approval_rate / 100) * years) / 1000000
+    (pa * annual_revenue_per_patient * (baseline_approval_rate / 100) * years) / 1_000_000
     for pa in pa_range
 ]
 revenue_improved = [
-    (pa * annual_revenue_per_patient * (improved_approval_rate / 100) * years) / 1000000
+    (pa * annual_revenue_per_patient * (improved_approval_rate / 100) * years) / 1_000_000
     for pa in pa_range
 ]
 
