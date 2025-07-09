@@ -83,3 +83,49 @@ fig.update_layout(
 st.plotly_chart(fig)
 
 st.write("Lamar Health offers automation for Prior Authorization. Customize the inputs on the left to see how much you can save.")
+
+# Revenue Generated from Approvals Graph
+st.header("Revenue Generated from Approvals")
+
+# X-axis: Range of PA's Submitted Annually (e.g., 0 to 750,000 in steps)
+max_pas = patients_per_month * 12 * years
+step_size = max(1000, int(max_pas / 10))
+pa_submitted_range = list(range(0, max_pas + 1, step_size))
+
+# Calculate revenue for each scenario
+baseline_revenue = [
+    pa * (baseline_approval_rate / 100) * (annual_revenue_per_patient * years) / 1_000_000
+    for pa in pa_submitted_range
+]
+improved_revenue = [
+    pa * (improved_approval_rate / 100) * (annual_revenue_per_patient * years) / 1_000_000
+    for pa in pa_submitted_range
+]
+
+revenue_plot_df = pd.DataFrame({
+    "PA's Submitted": pa_submitted_range,
+    f"Baseline Approval Rate ({baseline_approval_rate}%)": baseline_revenue,
+    f"Improved Approval Rate ({improved_approval_rate}%)": improved_revenue
+})
+
+revenue_plot_df_melted = revenue_plot_df.melt(
+    id_vars="PA's Submitted",
+    var_name="Scenario",
+    value_name="Revenue Generated ($M)"
+)
+
+fig3 = px.line(
+    revenue_plot_df_melted,
+    x="PA's Submitted",
+    y="Revenue Generated ($M)",
+    color="Scenario",
+    title="Revenue Generated from Approvals",
+    markers=True
+)
+fig3.update_layout(
+    xaxis_title="PA's Submitted",
+    yaxis_title="Revenue Generated ($M)",
+    legend_title='Scenario'
+)
+
+st.plotly_chart(fig3)
