@@ -120,4 +120,18 @@ fig2 = px.line(
 )
 
 fig2.update_layout(
-    xaxis_title="PA's Submitted Annually"_
+    xaxis_title="PA's Submitted Annually",
+    yaxis_title="Revenue Generated ($M)",
+    xaxis=dict(tickmode='linear', tick0=0, dtick=150000, range=[0, 750000]),
+    yaxis=dict(tickmode='linear', tick0=0, dtick=10, range=[0, 100], title="Revenue Generated ($M)"),
+    legend_title='Scenario'
+)
+
+st.plotly_chart(fig2)
+
+st.caption("""
+**Calculation Logic:**
+Revenue Generated = PA’s Submitted Annually × Annual Revenue per PA × Approval Rate × Time Horizon
+
+Chart values are expressed in **$1M units**, and capped for readability.
+""")
