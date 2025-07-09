@@ -7,7 +7,7 @@ import math
 st.sidebar.title("Lamar Health ROI Calculator")
 patients_per_month = st.sidebar.number_input("Number of PA's per Month", value=50000)
 hourly_salary = st.sidebar.number_input("Hourly Salary ($)", value=22)
-years = st.sidebar.number_input("Time Horizon (Years)", value=3)
+years = st.sidebar.number_input("Time Horizon (Years)", value=2)
 
 # Prior Authorization module
 enable_auth = st.sidebar.checkbox("Include Prior Authorization", value=True)
@@ -16,7 +16,7 @@ auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", valu
 
 # Revenue inputs
 baseline_approval_rate = st.sidebar.number_input("Baseline Approval Rate (%)", value=40, min_value=0, max_value=100, step=1)
-improved_approval_rate = st.sidebar.number_input("Improved Approval Rate (%)", value=41, min_value=0, max_value=100, step=1)
+improved_approval_rate = st.sidebar.number_input("Improved Approval Rate (%)", value=46, min_value=0, max_value=100, step=1)
 annual_revenue_per_patient = st.sidebar.number_input("Annual Revenue per PA Processed ($)", value=80000, step=1000)
 
 # Constants
