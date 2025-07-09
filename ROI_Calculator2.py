@@ -136,3 +136,4 @@ Revenue Generated = PA’s Submitted Annually × Annual Revenue per PA × Approv
 
 Chart values are expressed in **$1M units**.
 """)
+ 
