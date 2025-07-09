@@ -99,6 +99,9 @@ revenue_improved = [
     for pa in pa_range
 ]
 
+max_revenue = max(max(revenue_baseline), max(revenue_improved))
+y_axis_max = math.ceil(max_revenue / 10) * 10
+
 revenue_df = pd.DataFrame({
     "PA's Submitted Annually": pa_range,
     f'Baseline Approval Rate ({baseline_approval_rate}%)': revenue_baseline,
@@ -110,10 +113,6 @@ revenue_df_melted = revenue_df.melt(
     var_name="Scenario",
     value_name="Revenue Generated ($M)"
 )
-
-max_y = max(revenue_baseline + revenue_improved)
-y_tick = 10
-y_max_rounded = math.ceil(max_y / y_tick) * y_tick
 
 fig2 = px.line(
     revenue_df_melted,
@@ -128,7 +127,7 @@ fig2.update_layout(
     xaxis_title="PA's Submitted Annually",
     yaxis_title="Revenue Generated ($M)",
     xaxis=dict(tickmode='linear', tick0=0, dtick=150000),
-    yaxis=dict(tickmode='linear', tick0=0, dtick=y_tick, range=[0, y_max_rounded]),
+    yaxis=dict(tickmode='linear', tick0=0, dtick=10, range=[0, y_axis_max]),
     legend_title='Scenario'
 )
 
