@@ -49,14 +49,14 @@ if rounded_revenue >= 1_000_000_000:
 else:
     revenue_display = f"${rounded_revenue / 1_000_000:.2f}M"
 
-# Summary
+# Summary (ROI removed)
 st.title("Lamar Health ROI Summary")
 col1, col2, col3 = st.columns(3)
 col1.metric("Time Saved (Hours)", f"{time_saved_hours:,.2f}")
 col2.metric("Cost Savings ($)", f"${savings:,.0f}")
 col3.metric("Revenue Generated ($)", revenue_display)
 
-# Time graph
+# Time graph data
 months_range = list(range(1, months + 1))
 costs_before = [(auth_time * minutes_to_hours * patients_per_month * hourly_salary) * m for m in months_range]
 costs_after = [((auth_price) + (post_lamar_time * minutes_to_hours * hourly_salary)) * patients_per_month * m for m in months_range]
@@ -82,10 +82,12 @@ fig.update_layout(
 )
 st.plotly_chart(fig)
 
-# Revenue Graph
+st.write("Lamar Health offers automation for Prior Authorization. Customize the inputs on the left to see how much you can save.")
+
+# Revenue Generated from Lamar PA Submissions
 st.header("Revenue Generated from Lamar PA Submissions")
 
-# Define PA submission range
+# X-axis: dynamic PA volume range based on user input
 pa_step = 150000
 max_pa = 750000
 pa_range = list(range(0, max_pa + 1, pa_step))
@@ -111,9 +113,11 @@ revenue_df_melted = revenue_df.melt(
     value_name="Revenue Generated ($M)"
 )
 
-# Dynamic Y Axis: Tick every $10M
+# Calculate max Y and round up to nearest 10M for dynamic scaling
 y_max = max(revenue_baseline + revenue_improved)
 y_max_rounded = math.ceil(y_max / 10) * 10
+
+# Custom tick labels in $10M increments
 y_ticks = list(range(0, y_max_rounded + 10, 10))
 y_tick_labels = [f"${val}M" for val in y_ticks]
 
