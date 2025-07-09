@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import math
 
 # Sidebar inputs
 st.sidebar.title("Lamar Health ROI Calculator")
@@ -41,13 +42,14 @@ roi_percent = (savings / cost_before_total) * 100 if cost_before_total != 0 else
 approval_rate_delta = improved_approval_rate - baseline_approval_rate
 approval_rate_improvement = max(0, approval_rate_delta / 100)
 revenue_generated = patients_per_year * annual_revenue_per_patient * approval_rate_improvement * years
+revenue_rounded_millions = math.ceil(revenue_generated / 100000) * 100000 / 1_000_000
 
 # Summary
 st.title("Lamar Health ROI Summary")
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Time Saved (Hours)", f"{time_saved_hours:,.2f}")
 col2.metric("Cost Savings ($)", f"${savings:,.0f}")
-col3.metric("Revenue Generated ($)", f"${revenue_generated:,.0f}")
+col3.metric("Revenue Generated ($)", f"${revenue_rounded_millions:,.1f}M")
 col4.metric("ROI (%)", f"{roi_percent:.2f}%")
 
 # Time graph data
