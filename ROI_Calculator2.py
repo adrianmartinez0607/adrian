@@ -87,11 +87,8 @@ st.write("Lamar Health offers automation for Prior Authorization. Customize the 
 # Revenue Generated from Lamar PA Submissions
 st.header("Revenue Generated from Lamar PA Submissions")
 
-# X-axis: dynamic PA volume range based on user input
-submitted_annual = patients_per_month * 12
-max_pa = math.ceil(submitted_annual / 150000) * 150000
-pa_range = list(range(0, max_pa + 1, 150000))
-
+# Fixed X range: 0 to 750,000 in 150,000 steps
+pa_range = list(range(0, 750001, 150000))
 revenue_baseline = [
     (pa * annual_revenue_per_patient * (baseline_approval_rate / 100) * years) / 1_000_000
     for pa in pa_range
@@ -113,12 +110,6 @@ revenue_df_melted = revenue_df.melt(
     value_name="Revenue Generated ($M)"
 )
 
-# Calculate max Y and round up to nearest 10M for dynamic scaling
-y_max = max(revenue_baseline + revenue_improved)
-y_max_rounded = math.ceil(y_max / 10) * 10
-y_ticks = list(range(0, y_max_rounded + 10, 10))
-y_tick_labels = [f"${val}M" for val in y_ticks]
-
 fig2 = px.line(
     revenue_df_melted,
     x="PA's Submitted Annually",
@@ -129,19 +120,4 @@ fig2 = px.line(
 )
 
 fig2.update_layout(
-    xaxis_title="PA's Submitted Annually",
-    yaxis_title="Revenue Generated ($M)",
-    xaxis=dict(tickmode='linear', tick0=0, dtick=150000),
-    yaxis=dict(tickmode='array', tickvals=y_ticks, ticktext=y_tick_labels),
-    legend_title='Scenario'
-)
-
-st.plotly_chart(fig2)
-
-st.caption("""
-**Calculation Logic:**
-Revenue Generated = PA’s Submitted Annually × Annual Revenue per PA × Approval Rate × Time Horizon
-
-Chart values are expressed in **$1M units**.
-""")
- 
+    xaxis_title="PA's Submitted Annually"_
