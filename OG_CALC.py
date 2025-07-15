@@ -7,7 +7,7 @@ st.sidebar.title("Lamar Health ROI Calculator")
 
 patients_per_month = st.sidebar.number_input("Number of Patients per Month", value=200)
 hourly_salary = st.sidebar.number_input("Hourly Salary ($)", value=22)
-years = st.sidebar.number_input("Time Horizon (Years)", value=3)
+years = st.sidebar.number_input("Time Horizon (Years)", value=2)
 
 # Module toggles with prices and formulas
 enable_fax = st.sidebar.checkbox("Include Fax Processing", value=True)
@@ -16,15 +16,15 @@ fax_price = st.sidebar.number_input("Lamar Fax Processing Price ($)", value=2)
 
 enable_benefit = st.sidebar.checkbox("Include Benefit Check", value=True)
 st.sidebar.caption("**Benefit Check Formula:**\nBefore: 30 min × patients/month × hourly wage\nAfter: $benefit check price + 1 min × patients/month × hourly wage")
-benefit_price = st.sidebar.number_input("Lamar Benefit Check Price ($)", value=5)
+benefit_price = st.sidebar.number_input("Lamar Benefit Check Price ($)", value=10)
 
 enable_auth = st.sidebar.checkbox("Include Prior Authorization", value=True)
 st.sidebar.caption("**Prior Authorization Formula:**\nBefore: 40 min × patients/month × hourly wage\nAfter: $prior auth price + 1 min × patients/month × hourly wage")
-auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=6)
+auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=10)
 
 enable_order_entry = st.sidebar.checkbox("Include Order Entry Automation", value=True)
 st.sidebar.caption("**Order Entry Formula:**\nBefore: 4 min × patients/month × hourly wage\nAfter: $order entry price + 0.5 min × patients/month × hourly wage")
-order_entry_price = st.sidebar.number_input("Lamar Order Entry Price ($)", value=1.50)
+order_entry_price = st.sidebar.number_input("Lamar Order Entry Price ($)", value=.50)
 
 # Constants
 months = years * 12
