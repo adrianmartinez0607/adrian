@@ -13,15 +13,15 @@ years = st.sidebar.number_input("Time Horizon (Years)", value=3)
 # Module toggles and costs
 enable_fax = st.sidebar.checkbox("Include Fax Processing", value=True)
 st.sidebar.caption("**Fax Processing Formula:** Before: 15 min × patients/month × hourly wage\nAfter: $fax price × 1000 pages + 1 min × hourly wage")
-fax_price = st.sidebar.number_input("Lamar Fax Processing Price ($)", value=2.00)
+fax_price = st.sidebar.number_input("Lamar Fax Processing Price ($)", value=.25)
 
 enable_benefit = st.sidebar.checkbox("Include Benefit Check", value=True)
 st.sidebar.caption("**Benefit Check Formula:** Before: 30 min × patients/month × hourly wage\nAfter: $benefit check price + 1 min × patients/month × hourly wage")
-benefit_price = st.sidebar.number_input("Lamar Benefit Check Price ($)", value=5.00)
+benefit_price = st.sidebar.number_input("Lamar Benefit Check Price ($)", value=10.00)
 
 enable_auth = st.sidebar.checkbox("Include Prior Authorization", value=True)
 st.sidebar.caption("**Prior Authorization Formula:** Before: 40 min × patients/month × hourly wage\nAfter: $prior auth price + 1 min × patients/month × hourly wage")
-auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=6.00)
+auth_price = st.sidebar.number_input("Lamar Prior Authorization Price ($)", value=10.00)
 
 # Revenue inputs
 st.sidebar.markdown("---")
