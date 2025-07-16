@@ -6,19 +6,6 @@ from PIL import Image
 courses = {
 "Coyote Moon": {
 "holes": \[
-  import streamlit as st
-from PIL import Image
-
-# Define courses and their holes with yardages and tips
-
-import streamlit as st
-from PIL import Image
-
-# Define courses and their holes with yardages and tips
-
-courses = {
-"Coyote Moon": {
-"holes": \[
 {"number": 1, "image": "hole1.jpg", "yardage": 485,
 "overview": "📝 **Overview:** Scenic downhill opener with generous landing area.",
 "tee\_shot": "🎯 **Tee Shot Strategy:** Favor the left side to catch the slope.",
