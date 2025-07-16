@@ -3,7 +3,7 @@ from PIL import Image
 
 # Define courses and their holes with yardages and tips
 
-courses = {
+courses = ({
 "Coyote Moon": {
 "holes":[
 {"number": 1, "image": "hole1.jpg", "yardage": 485,
