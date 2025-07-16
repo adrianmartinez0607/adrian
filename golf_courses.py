@@ -97,7 +97,8 @@ courses = {
 "approach": "🔍 **Approach Game:** Second must carry hazard.",
 "tip": "💡 **Tee Tip:** Finish strong — birdie in play."}
 ]
-},
+}
+,
 "Grays Crossing": {
     "holes": [
 {"number": 1, "image": "grays1.jpg", "yardage": 375,
