@@ -231,7 +231,7 @@ courses = {
 
 st.sidebar.title("Golf Course Guide")
 selected\_course = st.sidebar.selectbox("Select Course", list(courses.keys()))
-hole\_numbers = \[f"Hole {h\['number']}" for h in courses\[selected\_course]\["holes"]]
+hole\numbers = \[f"Hole {h\['number']}" for h in courses\[selected\_course]\["holes"]]
 selected\_hole\_label = st.sidebar.selectbox("Select Hole", hole\_numbers)
 selected\_hole\_index = hole\_numbers.index(selected\_hole\_label)
 hole = courses\[selected\_course]\["holes"]\[selected\_hole\_index]
