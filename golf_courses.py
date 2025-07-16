@@ -225,6 +225,7 @@ courses = {
 "tip": "💡 Tee Tip: Closing birdie is there with smart play."}
 ]
 }
+}
         
 # Sidebar: Course and Hole selection
 
