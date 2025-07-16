@@ -11,6 +11,11 @@ from PIL import Image
 
 # Define courses and their holes with yardages and tips
 
+import streamlit as st
+from PIL import Image
+
+# Define courses and their holes with yardages and tips
+
 courses = {
 "Coyote Moon": {
 "holes": \[
@@ -106,8 +111,35 @@ courses = {
 "tip": "💡 **Tee Tip:** Finish strong — birdie in play."}
 ]
 },
-"Grays Crossing": { ... }  # Unchanged from earlier
+"Grays Crossing": {
+"holes": \[
+{"number": 1, "image": "grays1.jpg", "yardage": 428, "overview": "📝 **Overview:** Strategic opening hole with bunkers down the right.", "tee\_shot": "🎯 **Tee Shot Strategy:** Favor the left side to avoid fairway bunkers.", "approach": "🔍 **Approach Game:** Watch the wind into this elevated green.", "tip": "💡 **Tee Tip:** Club up if you’re unsure on approach."},
+{"number": 2, "image": "grays2.jpg", "yardage": 363, "overview": "📝 **Overview:** Dogleg left with pine framing both sides.", "tee\_shot": "🎯 **Tee Shot Strategy:** Draw off the tee sets up a great angle.", "approach": "🔍 **Approach Game:** Miss short rather than long.", "tip": "💡 **Tee Tip:** You can be aggressive off the tee."},
+{"number": 3, "image": "grays3.jpg", "yardage": 194, "overview": "📝 **Overview:** Scenic downhill par 3 with a view.", "tee\_shot": "🎯 **Tee Shot Strategy:** Choose club wisely — elevation makes it play short.", "approach": "🔍 **Approach Game:** Use slopes to feed it to the hole.", "tip": "💡 **Tee Tip:** Be decisive — wind can swirl."},
+{"number": 4, "image": "grays4.jpg", "yardage": 548, "overview": "📝 **Overview:** Risk-reward par 5 with trouble right.", "tee\_shot": "🎯 **Tee Shot Strategy:** Hit to the wide landing area left.", "approach": "🔍 **Approach Game:** Smart layup leaves a full wedge.", "tip": "💡 **Tee Tip:** Don’t chase eagle unless perfectly set up."},
+{"number": 5, "image": "grays5.jpg", "yardage": 429, "overview": "📝 **Overview:** Demanding par 4 with elevated green.", "tee\_shot": "🎯 **Tee Shot Strategy:** Long and straight required.", "approach": "🔍 **Approach Game:** Green is deep but protected.", "tip": "💡 **Tee Tip:** Aim for center of green."},
+{"number": 6, "image": "grays6.jpg", "yardage": 389, "overview": "📝 **Overview:** Dogleg right with bunkers.", "tee\_shot": "🎯 **Tee Shot Strategy:** Hug left to shorten the hole.", "approach": "🔍 **Approach Game:** Don’t flirt with the right edge.", "tip": "💡 **Tee Tip:** Safe play pays off."},
+{"number": 7, "image": "grays7.jpg", "yardage": 162, "overview": "📝 **Overview:** Short par 3 with deep bunkers.", "tee\_shot": "🎯 **Tee Shot Strategy:** High shot lands soft.", "approach": "🔍 **Approach Game:** Don’t miss left.", "tip": "💡 **Tee Tip:** Aim center green regardless of pin."},
+{"number": 8, "image": "grays8.jpg", "yardage": 480, "overview": "📝 **Overview:** Reachable par 5 with narrow landing.", "tee\_shot": "🎯 **Tee Shot Strategy:** Hug the right side for better angle.", "approach": "🔍 **Approach Game:** Lay up to full wedge.", "tip": "💡 **Tee Tip:** Birdie hole if played smart."},
+{"number": 9, "image": "grays9.jpg", "yardage": 438, "overview": "📝 **Overview:** Tough finish to the front nine.", "tee\_shot": "🎯 **Tee Shot Strategy:** Favor left side to open green.", "approach": "🔍 **Approach Game:** Club up for uphill shot.", "tip": "💡 **Tee Tip:** Big green — know your pin."},
+{"number": 10, "image": "grays10.jpg", "yardage": 410, "overview": "📝 **Overview:** Bunkers define this dogleg right.", "tee\_shot": "🎯 **Tee Shot Strategy:** Aim left edge of fairway bunker.", "approach": "🔍 **Approach Game:** Avoid short right.", "tip": "💡 **Tee Tip:** Right side of green feeds left."},
+{"number": 11, "image": "grays11.jpg", "yardage": 172, "overview": "📝 **Overview:** Challenging par 3 over water.", "tee\_shot": "🎯 **Tee Shot Strategy:** Hit solid — carry is key.", "approach": "🔍 **Approach Game:** Middle of green is safe.", "tip": "💡 **Tee Tip:** Play smart — par is a great score."},
+{"number": 12, "image": "grays12.jpg", "yardage": 378, "overview": "📝 **Overview:** Straightforward par 4.", "tee\_shot": "🎯 **Tee Shot Strategy:** Drive center fairway.", "approach": "🔍 **Approach Game:** Avoid back left miss.", "tip": "💡 **Tee Tip:** Trust your yardage."},
+{"number": 13, "image": "grays13.jpg", "yardage": 412, "overview": "📝 **Overview:** Demanding par 4 with water in play.", "tee\_shot": "🎯 **Tee Shot Strategy:** Accuracy is key — aim right.", "approach": "🔍 **Approach Game:** Avoid long into water.", "tip": "💡 **Tee Tip:** Use extra club in wind."},
+{"number": 14, "image": "grays14.jpg", "yardage": 334, "overview": "📝 **Overview:** Short par 4 with tempting green.", "tee\_shot": "🎯 **Tee Shot Strategy:** Lay up right or go for it.", "approach": "🔍 **Approach Game:** Green is tricky.", "tip": "💡 **Tee Tip:** A wedge is your friend here."},
+{"number": 15, "image": "grays15.jpg", "yardage": 525, "overview": "📝 **Overview:** Strategic par 5 with tilt.", "tee\_shot": "🎯 **Tee Shot Strategy:** Right side is best.", "approach": "🔍 **Approach Game:** Think about third shot yardage.", "tip": "💡 **Tee Tip:** You can score here."},
+{"number": 16, "image": "grays16.jpg", "yardage": 194, "overview": "📝 **Overview:** Downhill par 3 plays short.", "tee\_shot": "🎯 **Tee Shot Strategy:** Elevation affects club.", "approach": "🔍 **Approach Game:** Green is firm.", "tip": "💡 **Tee Tip:** Take 1–3 clubs less."},
+{"number": 17, "image": "grays17.jpg", "yardage": 354, "overview": "📝 **Overview:** Wind-assisted short par 4.", "tee\_shot": "🎯 **Tee Shot Strategy:** Avoid going too long.", "approach": "🔍 **Approach Game:** Firm green, hard to hold.", "tip": "💡 **Tee Tip:** Land short and bounce on."},
+{"number": 18, "image": "grays18.jpg", "yardage": 475, "overview": "📝 **Overview:** Long, tough closer.", "tee\_shot": "🎯 **Tee Shot Strategy:** Favor right-center.", "approach": "🔍 **Approach Game:** Avoid right hazard.", "tip": "💡 **Tee Tip:** Three-shot hole for most."}
+]
 }
+}
+
+# Sidebar: Course and Hole selection
+
+st.sidebar.title("Golf Course Guide")
+selected\_course = st.sidebar.selectbox("Select Course", list(courses.keys()))
+hole\_numbers = \[f"Hole
 
 # Sidebar: Course and Hole selection
 
