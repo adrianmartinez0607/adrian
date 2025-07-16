@@ -67,12 +67,12 @@ hole_numbers = [f"Hole {hole['hole']}" for hole in hole_data]
 selected_hole = st.selectbox("Select Hole", hole_numbers)
 hole = next(h for h in hole_data if f"Hole {h['hole']}" == selected_hole)
 
-# Load image and resize to 60% of original
+# Load image and resize to 40% of original
 image_path = os.path.join(IMAGE_DIR, hole['image'])
 if os.path.exists(image_path):
     image = Image.open(image_path)
     width, height = image.size
-    resized_image = image.resize((int(width * 0.6), int(height * 0.6)))
+    resized_image = image.resize((int(width * 0.4), int(height * 0.4)))
     st.image(resized_image, use_container_width=True)
 else:
     st.warning(f"Image not found: {hole['image']}. Make sure it's in the same directory as the script.")
