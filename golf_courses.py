@@ -244,3 +244,5 @@ st.markdown(f"""
 
 {hole\['tip']}
 """)
+    }
+    }
