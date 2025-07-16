@@ -99,7 +99,7 @@ courses = {
 ]
 },
 "Grays Crossing": {
-"holes": \"Grays Crossing": {
+"holes":"Grays Crossing": {
 "holes":[
 {"number": 1, "image": "grays1.jpg", "yardage": 375,
 "overview": "📝 **Overview:** A solid opening par 4 that sets the tone for the round with gentle dogleg right.",
