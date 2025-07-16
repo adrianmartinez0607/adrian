@@ -99,8 +99,7 @@ courses = {
 ]
 },
 "Grays Crossing": {
-"holes":"Grays Crossing": {
-"holes":[
+    "holes": [
 {"number": 1, "image": "grays1.jpg", "yardage": 375,
 "overview": "📝 **Overview:** A solid opening par 4 that sets the tone for the round with gentle dogleg right.",
 "tee_shot": "🎯 **Tee Shot Strategy:** Favor the left side off the tee to open up your approach. A 240–260 yard drive is ideal.",
