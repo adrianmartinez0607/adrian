@@ -5,7 +5,7 @@ from PIL import Image
 
 courses = {
 "Coyote Moon": {
-"holes": \[
+"holes": \
 {"number": 1, "image": "hole1.jpg", "yardage": 485,
 "overview": "📝 **Overview:** Scenic downhill opener with generous landing area.",
 "tee\_shot": "🎯 **Tee Shot Strategy:** Favor the left side to catch the slope.",
