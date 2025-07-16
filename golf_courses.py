@@ -224,7 +224,8 @@ courses = {
 "approach": "🔍 Approach Game: 2nd shot left opens up approach.",
 "tip": "💡 Tee Tip: Closing birdie is there with smart play."}
 ]
-
+}
+        
 # Sidebar: Course and Hole selection
 
 st.sidebar.title("Golf Course Guide")
