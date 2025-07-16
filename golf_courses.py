@@ -214,3 +214,30 @@ courses.update({
     }
 
 })
+import streamlit as st
+from PIL import Image
+import os
+
+st.set_page_config(layout="centered", page_title="Golf Course Guide")
+
+# Sidebar for course and hole selection
+st.sidebar.title("Golf Course Guide")
+selected_course = st.sidebar.selectbox("Select Course", list(courses.keys()))
+hole_numbers = [f"Hole {h['number']}" for h in courses[selected_course]["holes"]]
+selected_hole_label = st.sidebar.selectbox("Select Hole", hole_numbers)
+selected_hole_index = hole_numbers.index(selected_hole_label)
+hole = courses[selected_course]["holes"][selected_hole_index]
+
+# Display content
+st.title(f"{selected_course} - Hole {hole['number']}")
+st.markdown(f"**Yardage:** {hole['yardage']} yards")
+st.markdown(hole["overview"])
+st.markdown(hole["tee_shot"])
+st.markdown(hole["approach"])
+st.markdown(hole["tip"])
+
+# Show image (ensure images are in the same directory or adjust path)
+if os.path.exists(hole["image"]):
+    st.image(Image.open(hole["image"]), use_column_width=True)
+else:
+    st.warning(f"Image not found: {hole['image']}")
