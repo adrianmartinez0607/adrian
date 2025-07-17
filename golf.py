@@ -1,207 +1,177 @@
 import streamlit as st
-from PIL import Image
 
-# Hole data with yardages and strategy
-courses = {
-    "Coyote Moon": {
-        "tee_color": "White Tees",
-        "holes": [
-            {
-                "number": i,
-                "image": f"hole{i}.jpg",
-                "yardage": yard,
-                "overview": ov,
-                "tee_shot": ts,
-                "approach": ap,
-                "tip": tp
-            } for i, (yard, ov, ts, ap, tp) in enumerate([
-                (485, "Scenic downhill opener with generous landing area.",
-                 "Favor the left side to catch the slope.",
-                 "Avoid going long — green slopes back to front.",
-                 "Use a 3W or hybrid for safety."),
-                (365, "Dogleg left through trees.",
-                 "Position drive near corner for best angle.",
-                 "Green is protected short-left — fly it all the way.",
-                 "Mid-iron off tee leaves full wedge."),
-                (190, "Uphill par 3 to a narrow green.",
-                 "Take one more club due to elevation.",
-                 "Avoid right — steep runoff.",
-                 "Middle of green is never bad."),
-                (410, "Tough par 4 with a blind tee shot.",
-                 "Aim at the tree line and trust the fairway opens up.",
-                 "Second shot plays slightly uphill.",
-                 "Use yardage markers carefully."),
-                (330, "Short par 4 with options.",
-                 "Lay up with long iron or drive corner with draw.",
-                 "Small green with bunkers left.",
-                 "Don’t overthink the tee shot."),
-                (380, "Par 4 with water left.",
-                 "Drive up right side for safest approach.",
-                 "Avoid pulling approach into hazard.",
-                 "Trust your fade."),
-                (195, "Another strong par 3.",
-                 "Front bunker catches mishits.",
-                 "Middle of green is fine — green slopes back.",
-                 "Commit to your number."),
-                (540, "Scenic downhill par 5.",
-                 "Grip it and rip it — wide landing zone.",
-                 "Second shot needs placement for third.",
-                 "Avoid going long on approach."),
-                (425, "Long uphill par 4.",
-                 "Drive must carry ridge.",
-                 "Elevated green demands club selection.",
-                 "Driver essential — don’t lay back."),
-                (365, "Dogleg right with elevated tee.",
-                 "Cut the corner with a fade.",
-                 "Short wedge in if tee shot is ideal.",
-                 "Play aggressive off tee."),
-                (185, "Short par 3 over a gorge.",
-                 "Do not miss short — it’s jail.",
-                 "Take enough club — swirling wind here.",
-                 "Club up if unsure."),
-                (400, "Tree-lined dogleg left.",
-                 "Driver leaves wedge if hit well.",
-                 "Green is shallow and firm.",
-                 "Middle-left is safe zone."),
-                (425, "Straightaway par 4 with slight rise.",
-                 "Driver sets up a good mid-iron.",
-                 "Avoid right-side trees.",
-                 "Play for center of green."),
-                (190, "Flat par 3 with tricky green.",
-                 "Accuracy is key — bunkers short left.",
-                 "Pin front right? Be bold.",
-                 "Don’t flirt with long left."),
-                (525, "Risk-reward par 5.",
-                 "Left side opens up second shot.",
-                 "Green is reachable — bunkers short.",
-                 "Eagle possible with two perfect shots."),
-                (355, "Short par 4 you can drive.",
-                 "Go for it or lay back — both work.",
-                 "Sloped green defends well.",
-                 "Wedge game matters here."),
-                (175, "Straightforward par 3.",
-                 "Wind can swirl — trust your number.",
-                 "Back shelf is hard to hold.",
-                 "Middle of green all day."),
-                (510, "Great closing hole.",
-                 "Big tee shot makes it reachable.",
-                 "Second must carry hazard.",
-                 "Finish strong — birdie in play.")
-            ], start=1)
-        ]
-    },
-    "Grays Crossing": {
-        "tee_color": "Stampede (Gold Tees)",
-        "holes": [
-            {
-                "number": i,
-                "image": f"grays{i}.jpg",
-                "yardage": yard,
-                "overview": ov,
-                "tee_shot": ts,
-                "approach": ap,
-                "tip": tp
-            } for i, (yard, ov, ts, ap, tp) in enumerate([
-                (405, "Opens into prevailing wind — tough start.",
-                 "Favor left side to avoid bunkers and open angle.",
-                 "Green is guarded right — middle is smart.",
-                 "Driver required — commit to line."),
-                (375, "Slight dogleg left with tricky fairway bunker.",
-                 "Stay short of left bunker off tee.",
-                 "Green slopes right with bunkers left.",
-                 "Long iron or hybrid off tee works."),
-                (585, "Sweeping par 5 downwind.",
-                 "Left side ideal — catch fairway slope.",
-                 "Wedge in or go for it over last bunker.",
-                 "Miss right for safe bounce."),
-                (165, "Shortest hole but requires precision.",
-                 "Wind in face — club up.",
-                 "Aim right — slopes feed left.",
-                 "Par is a good score."),
-                (420, "Long par 4 with pine backdrop.",
-                 "Right side is safer — left tightens approach.",
-                 "Downhill into fast green.",
-                 "Play short to run it on."),
-                (325, "Driveable par 4 — risk/reward.",
-                 "Aggressive line over bunkers or safe layup right.",
-                 "Green slopes front to back.",
-                 "Only go for it if confident."),
-                (580, "Par 5 that slopes left to right.",
-                 "Left side avoids kick downslope.",
-                 "Shallow green demands high shot.",
-                 "Don’t miss long."),
-                (185, "Downhill par 3 with tricky wind.",
-                 "Bunkers right and pond left.",
-                 "Plays shorter than number.",
-                 "Center hit wins."),
-                (455, "Back into wind — long par 4 uphill.",
-                 "Drive right side — gets left bounce.",
-                 "Club up for elevated green.",
-                 "Don’t overclub — steep slope back."),
-                (395, "Long par 4 with tough green.",
-                 "Split bunkers define landing zone.",
-                 "Wind helps — second plays shorter.",
-                 "Read pin position carefully."),
-                (205, "Medium par 3 with deep green.",
-                 "Avoid left bunker — ball feeds left.",
-                 "Middle of green best target.",
-                 "Use full iron — don’t baby it."),
-                (420, "Traditional par 4 with great angle from left.",
-                 "Aim left center off tee.",
-                 "Green flanked by bunkers both sides.",
-                 "Solid iron will reward."),
-                (435, "Water all the way on right.",
-                 "Keep drive left — huge penalty otherwise.",
-                 "Green guarded and firm.",
-                 "Play safe and avoid hero shot."),
-                (340, "Short par 4 with small green.",
-                 "Drive over bunkers or lay back.",
-                 "Wedge must be precise.",
-                 "Eagle or bogey — choose wisely."),
-                (535, "Birdie chance if thought out.",
-                 "Right side for bounce left.",
-                 "Final wedge must stick a shallow green.",
-                 "Club control crucial."),
-                (175, "Deceptive par 3 downhill.",
-                 "1–3 clubs less depending on wind.",
-                 "Front miss is okay.",
-                 "Trust your swing."),
-                (410, "Tough green to hold with wind at back.",
-                 "Avoid driving through fairway.",
-                 "Aim over left edge of bunker.",
-                 "High iron best to stop ball."),
-                (555, "Strong finisher with split fairway.",
-                 "Right-center gives best angle unless cutting left.",
-                 "Hazard right on second — be smart.",
-                 "Birdie if executed well.")
-            ], start=1)
-        ]
-    }
-}
+st.set_page_config(page_title="Grays Crossing Golf Guide", layout="centered")
+st.title("\U000026F3 Grays Crossing Golf Course Guide")
+st.markdown("### Gold Tees Yardage & Strategy")
 
-# Sidebar: Course and Hole selection
-st.set_page_config(page_title="Golf Course Guide", layout="centered")
-st.sidebar.title("🏌️ Golf Course Guide")
-selected_course = st.sidebar.selectbox("Select Course", list(courses.keys()))
-hole_options = [f"Hole {h['number']}" for h in courses[selected_course]["holes"]]
-selected_hole_index = st.sidebar.selectbox("Select Hole", hole_options, index=0)
-hole = courses[selected_course]["holes"][int(selected_hole_index.split()[1]) - 1]
+# Hole selection
+selected_hole = st.selectbox("Select Hole", [f"Hole {i}" for i in range(1, 19)])
 
-# Display hole content
-st.title(f"{selected_course} – Hole {hole['number']}")
-st.markdown(f"**Tee Box:** {courses[selected_course]['tee_color']}")
-st.markdown(f"**Yardage:** {hole['yardage']} yards")
+def render_hole(image_file, hole_title, tips):
+    st.image(image_file, use_column_width=True)
+    st.markdown(f"### {hole_title}")
+    st.markdown(tips)
 
-# Show image
-try:
-    img = Image.open(hole["image"])
-    st.image(img, caption=f"{selected_course} Hole {hole['number']}", use_column_width=True)
-except:
-    st.warning("Image not found.")
+if selected_hole == "Hole 1":
+    render_hole("grays1.jpg", "Hole 1 – 405 Yards", """
+    **Tee Shot:** Favor the left side of the fairway to avoid the trees on the right and give yourself a clear angle in.
 
-# Display Strategy
-st.subheader("⛳ Strategy & Tips")
-st.markdown(f"**Overview:** {hole['overview']}")
-st.markdown(f"**Tee Shot Strategy:** {hole['tee_shot']}")
-st.markdown(f"**Approach Game:** {hole['approach']}")
-st.markdown(f"**Tee Tip:** {hole['tip']}")
+    **Approach:** A mid to short iron will leave you a solid chance for birdie—watch the pin as the green slopes back to front.
+
+    **Overall Tip:** Stay focused off the tee, this opening hole rewards precision over power.
+    """)
+
+elif selected_hole == "Hole 2":
+    render_hole("grays2.jpg", "Hole 2 – 178 Yards", """
+    **Tee Shot:** Choose your club carefully and aim for the center of the green. Avoid the bunker left.
+
+    **Approach:** Better to be long than short here—short shots may roll back off the front.
+
+    **Overall Tip:** Trust your number and commit. Birdie chance with a confident swing.
+    """)
+
+elif selected_hole == "Hole 3":
+    render_hole("grays3.jpg", "Hole 3 – 515 Yards", """
+    **Tee Shot:** A drive to the right side opens up the fairway for a layup or a go at the green in two.
+
+    **Approach:** Consider laying up left for a better angle in—green is narrow and guarded.
+
+    **Overall Tip:** Don't force the eagle look. Smart play will leave a good birdie chance.
+    """)
+
+elif selected_hole == "Hole 4":
+    render_hole("grays4.jpg", "Hole 4 – 431 Yards", """
+    **Tee Shot:** Position tee shot favoring the left to open up your view of the green.
+
+    **Approach:** Requires a long iron or hybrid. Don’t miss right—trouble lurks there.
+
+    **Overall Tip:** Par is a great score here. Play conservative unless you’re confident.
+    """)
+
+elif selected_hole == "Hole 5":
+    render_hole("grays5.jpg", "Hole 5 – 195 Yards", """
+    **Tee Shot:** A precise mid-iron is needed here. The left side of the green feeds nicely.
+
+    **Approach:** Watch the wind—shots can easily drift short and right into the bunker.
+
+    **Overall Tip:** Play for the center and walk away happy.
+    """)
+
+elif selected_hole == "Hole 6":
+    render_hole("grays6.jpg", "Hole 6 – 368 Yards", """
+    **Tee Shot:** Place tee shot short of bunkers for a wedge approach.
+
+    **Approach:** The green is protected short-right, so take enough club.
+
+    **Overall Tip:** Great birdie chance with solid placement.
+    """)
+
+elif selected_hole == "Hole 7":
+    render_hole("grays7.jpg", "Hole 7 – 537 Yards", """
+    **Tee Shot:** Favor the left side—this opens the hole.
+
+    **Approach:** Lay up to your ideal wedge yardage unless you're going for it.
+
+    **Overall Tip:** Long and winding—play smart and avoid the fairway traps.
+    """)
+
+elif selected_hole == "Hole 8":
+    render_hole("grays8.jpg", "Hole 8 – 396 Yards", """
+    **Tee Shot:** Accurate drive essential—narrow fairway.
+
+    **Approach:** Short iron to slightly elevated green. Keep it below the hole.
+
+    **Overall Tip:** Precision matters here—play to your strengths.
+    """)
+
+elif selected_hole == "Hole 9":
+    render_hole("grays9.jpg", "Hole 9 – 448 Yards", """
+    **Tee Shot:** Favor the left-center of the fairway to avoid tree trouble.
+
+    **Approach:** A long second shot—consider playing for the fat part of the green.
+
+    **Overall Tip:** A tough finisher to the front nine—take par and run.
+    """)
+
+elif selected_hole == "Hole 10":
+    render_hole("grays10.jpg", "Hole 10 – 372 Yards", """
+    **Tee Shot:** Aim between the right-side bunkers for a great angle.
+
+    **Approach:** Wind helps, so trust your short club. Mind the tricky green contours.
+
+    **Overall Tip:** One of the tougher greens—prioritize distance control.
+    """)
+
+elif selected_hole == "Hole 11":
+    render_hole("grays11.jpg", "Hole 11 – 152 Yards", """
+    **Tee Shot:** Favor right side—terrain funnels left. Avoid the deep bunker.
+
+    **Approach:** Commit to your line. Green is narrow and deep.
+
+    **Overall Tip:** Accuracy wins here.
+    """)
+
+elif selected_hole == "Hole 12":
+    render_hole("grays12.jpg", "Hole 12 – 413 Yards", """
+    **Tee Shot:** Generous fairway—favor left for best angle.
+
+    **Approach:** Deep bunkers guard both sides—aim center.
+
+    **Overall Tip:** A classic risk-reward par four—take what it gives.
+    """)
+
+elif selected_hole == "Hole 13":
+    render_hole("grays13.jpg", "Hole 13 – 412 Yards", """
+    **Tee Shot:** Water lurks. Accuracy over distance. Keep it straight.
+
+    **Approach:** Well-protected green—play to the middle.
+
+    **Overall Tip:** Stay dry, stay smart.
+    """)
+
+elif selected_hole == "Hole 14":
+    render_hole("grays14.jpg", "Hole 14 – 334 Yards", """
+    **Tee Shot:** Tempting to go for it, but fairway play sets up a great wedge.
+
+    **Approach:** Tiny green—must be sharp. Right miss is better than left.
+
+    **Overall Tip:** Think through your tee shot—birdie is there.
+    """)
+
+elif selected_hole == "Hole 15":
+    render_hole("grays15.jpg", "Hole 15 – 525 Yards", """
+    **Tee Shot:** Play to the right side to take advantage of the slope.
+
+    **Approach:** Ball feeds right to left—aim accordingly.
+
+    **Overall Tip:** Manage your way to birdie—avoid big misses.
+    """)
+
+elif selected_hole == "Hole 16":
+    render_hole("grays16.jpg", "Hole 16 – 194 Yards", """
+    **Tee Shot:** Plays shorter due to elevation—1 to 3 clubs less.
+
+    **Approach:** Hit it high and soft. Green won’t hold low shots.
+
+    **Overall Tip:** Trust your club and commit.
+    """)
+
+elif selected_hole == "Hole 17":
+    render_hole("grays17.jpg", "Hole 17 – 354 Yards", """
+    **Tee Shot:** Don’t blow it through the fairway with wind at your back. Aim over the left bunker.
+
+    **Approach:** High shot needed—firm green hard to hold.
+
+    **Overall Tip:** Focus on spin and trajectory.
+    """)
+
+elif selected_hole == "Hole 18":
+    render_hole("grays18.jpg", "Hole 18 – 475 Yards", """
+    **Tee Shot:** Favor right-center to avoid trees.
+
+    **Second Shot:** Most will lay up left—big hitters can challenge the right.
+
+    **Approach:** Don’t go long. This green is tricky.
+
+    **Overall Tip:** Play smart and close strong.
+    """)
