@@ -8,7 +8,7 @@ st.markdown("### Gold Tees Yardage & Strategy")
 selected_hole = st.selectbox("Select Hole", [f"Hole {i}" for i in range(1, 19)])
 
 def render_hole(image_file, hole_title, tips):
-    st.image(image_file, use_column_width=True)
+    st.image(image_file, use_container_width=True)
     st.markdown(f"### {hole_title}")
     st.markdown(tips)
 
