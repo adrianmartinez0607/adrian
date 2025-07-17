@@ -1,3 +1,30 @@
+import streamlit as st
+import json
+
+# Sidebar: Course and Hole selection
+st.sidebar.title("🏌️ Golf Course Guide")
+selected_course = st.sidebar.selectbox("Select Course", list(courses.keys()))
+hole_numbers = [f"Hole {h['number']}" for h in courses[selected_course]["holes"]]
+selected_hole_label = st.sidebar.selectbox("Select Hole", hole_numbers)
+selected_hole_index = hole_numbers.index(selected_hole_label)
+hole = courses[selected_course]["holes"][selected_hole_index]
+
+# Main Display
+st.title(f"{selected_course} - Hole {hole['number']}")
+st.image(hole["image"], use_column_width=True)
+st.markdown(f"**Yardage:** {hole['yardage']} yards")
+st.markdown(hole["overview"])
+st.markdown(hole["tee_shot"])
+st.markdown(hole["approach"])
+st.markdown(hole["tip"])
+
+# Yardage Summary (Optional)
+with st.expander("📊 View Yardage Summary"):
+    total_yardage = sum(h["yardage"] for h in courses[selected_course]["holes"])
+    st.markdown(f"**Total Yardage:** {total_yardage} yards")
+    st.markdown("### Hole-by-Hole Yardage")
+    for h in courses[selected_course]["holes"]:
+        st.markdown(f"- Hole {h['number']}: {h['yardage']} yards")
 
 courses = {
     "Coyote Moon": {
@@ -95,35 +122,3 @@ courses = {
         ]
     }
 }
-
-import streamlit as st
-import json
-
-# Load course data
-with open("golf_courses.py", "r") as f:
-    exec(f.read())
-
-# Sidebar: Course and Hole selection
-st.sidebar.title("🏌️ Golf Course Guide")
-selected_course = st.sidebar.selectbox("Select Course", list(courses.keys()))
-hole_numbers = [f"Hole {h['number']}" for h in courses[selected_course]["holes"]]
-selected_hole_label = st.sidebar.selectbox("Select Hole", hole_numbers)
-selected_hole_index = hole_numbers.index(selected_hole_label)
-hole = courses[selected_course]["holes"][selected_hole_index]
-
-# Main Display
-st.title(f"{selected_course} - Hole {hole['number']}")
-st.image(hole["image"], use_column_width=True)
-st.markdown(f"**Yardage:** {hole['yardage']} yards")
-st.markdown(hole["overview"])
-st.markdown(hole["tee_shot"])
-st.markdown(hole["approach"])
-st.markdown(hole["tip"])
-
-# Yardage Summary (Optional)
-with st.expander("📊 View Yardage Summary"):
-    total_yardage = sum(h["yardage"] for h in courses[selected_course]["holes"])
-    st.markdown(f"**Total Yardage:** {total_yardage} yards")
-    st.markdown("### Hole-by-Hole Yardage")
-    for h in courses[selected_course]["holes"]:
-        st.markdown(f"- Hole {h['number']}: {h['yardage']} yards")
