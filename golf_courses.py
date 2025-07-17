@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 
-# Full hole data with tee, approach, and overall strategy
+# Hole data with expanded strategy
 hole_data = {
     1: {"Par": 5, "Yardage": 469, "Tips": "**Tee Shot:** Favor the left side to open up the fairway. Avoid the trees on the right.\n\n**Approach:** Long hitters may go for it in two (~245 carry), but the safe play is to lay up to 114–146 yards, short of left bunkers.\n\n**Overall:** Play for position. A wedge into the two-tiered green gives a great birdie chance."},
     2: {"Par": 4, "Yardage": 382, "Tips": "**Tee Shot:** Aim just left of the lone pine on the right. That line gives a clear approach.\n\n**Approach:** Wind can affect this shot from ~110–130 yards. Green slopes back-to-front — do not go long.\n\n**Overall:** Controlled tee and smart club on approach = par or birdie."},
@@ -28,11 +28,11 @@ st.set_page_config(page_title="Coyote Moon Course Guide", layout="wide")
 st.title("⛳ Coyote Moon Golf Course Guide")
 st.markdown("Tips from the **White Tees**")
 
-# Hole selection
-hole_number = st.sidebar.selectbox("Select Hole", list(range(1, 19)))
+# Hole selection under title
+hole_number = st.selectbox("Select Hole", list(range(1, 19)))
 image_file = f"hole{hole_number}.jpg"
 
-# Display hole info
+# Hole info
 st.subheader(f"Hole {hole_number} - Par {hole_data[hole_number]['Par']} - {hole_data[hole_number]['Yardage']} yds")
 
 # Display image at 60% width
@@ -42,7 +42,7 @@ try:
 except FileNotFoundError:
     st.warning(f"Image for Hole {hole_number} not found: `{image_file}` missing.")
 
-# Display tips
+# Tips and strategy
 st.markdown("### Tips & Strategy")
 st.markdown(hole_data[hole_number]["Tips"])
 
