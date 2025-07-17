@@ -3,7 +3,7 @@ from PIL import Image
 
 # Page setup
 st.set_page_config(page_title="Course Guide", layout="centered")
-st.title("⛳ Boys Weekend")
+st.title("⛳ Golf Course Yardage & Strategy")
 
 # Course selector
 course = st.selectbox("Select Course", ["Coyote Moon", "Grays Crossing"])
